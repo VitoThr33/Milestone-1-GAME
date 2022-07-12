@@ -1,0 +1,43 @@
+*, *::after, *::before{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    overflow: hidden;
+}
+
+
+.title{
+    z-index: 10;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    inset: 0;
+    margin: 0;
+    flex-direction: column;
+}
+
+
+.subtitle {
+    margin-top: .5rem;
+}
+
+
+.hide{
+    display: none;
+}
+
+
+.lebron{
+    --lebron-top:-1000;
+    --lebron-size:60px;
+    position: absolute;
+    background-color: red;
+    width: var(--lebron-size);
+    height: var(--lebron-size);
+    left: var(--lebron-size);
+    top: var(--lebron-size)* 1px;
+    border-radius: 50%;
+}
