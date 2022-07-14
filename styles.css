@@ -7,7 +7,6 @@ body{
     overflow: hidden;
 }
 
-
 .title{
     z-index: 10;
     position: absolute;
@@ -34,10 +33,12 @@ body{
     --lebron-top:-1000;
     --lebron-size:60px;
     position: absolute;
-    background-color: red;
+    background-image: url("resources/8bit\ lebron.jpg");
+    background-size: 60px;
     width: var(--lebron-size);
     height: var(--lebron-size);
     left: var(--lebron-size);
-    top: var(--lebron-size)* 1px;
+    top: calc(var(--lebron-top)* 1px);
     border-radius: 50%;
+    ;
 }
