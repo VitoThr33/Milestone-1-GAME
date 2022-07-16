@@ -1,6 +1,6 @@
 //import lebron.js
 import {updateLebron, setupLebron,getLebronRect} from "./lebron.js"
-
+import {updateShip} from "./championships.js"
 
 document.addEventListener("keypress", handleStart,{once: true})
 const title= document.querySelector("[data-title]")
@@ -17,6 +17,7 @@ function updateLoop(time){
     }
    const delta=time-lastTime
    updateLebron(delta)
+   updateShip(delta)
    if (checkLose()) return handleLose()
    lastTime=time
    window.requestAnimationFrame(updateLoop)

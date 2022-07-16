@@ -43,30 +43,30 @@ body{
     ;
 }
 
-.championships {
-    --championships-width:120;
-    --championships-left:100;
+.ship {
+    --ship-width:120;
+    --ship-left:100;
     --hole-top:500;
     --hole-height:120;
     top: 0;
     bottom: 0;
     position: absolute;
-    width: calc(var(--championships-width)*1px);
-    left: calc(var(--championships-left)*1px);
+    width: calc(var(--ship-width)*1px);
+    left: calc(var(--ship-left)*1px);
 }
 
-.championships > .segment{
+.ship > .segment{
     position: absolute;
     width: 100%;
     background-color: darkgreen;
 }
 
-.championships > .top{
+.ship > .top{
     top: 0;
     bottom:calc(var(--hole-top)*1px); ;
 }
 
-.championships > .bottom{
+.ship  > .bottom{
     bottom: 0;
     top:calc(100vh - (var(--hole-top)*1px) + calc(var(--hole-height)*1px)); 
 }
