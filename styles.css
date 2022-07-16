@@ -44,10 +44,6 @@ body{
 }
 
 .ship {
-    --ship-width:120;
-    --ship-left:100;
-    --hole-top:500;
-    --hole-height:120;
     top: 0;
     bottom: 0;
     position: absolute;

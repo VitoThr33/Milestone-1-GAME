@@ -1,6 +1,6 @@
 const lebronChar=document.querySelector("[data-lebron]")
 const lebron_speed=0.5
-const float_duration=125
+const float_duration=150
 let timeSinceLastFloat= Number.POSITIVE_INFINITY
 
 export function setupLebron(){

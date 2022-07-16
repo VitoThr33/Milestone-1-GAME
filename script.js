@@ -1,6 +1,6 @@
-//import lebron.js
+//import lebron.js and championships.js
 import {updateLebron, setupLebron,getLebronRect} from "./lebron.js"
-import {updateShip} from "./championships.js"
+import {updateShip,setupShips,getPassedShipsCount, getShipRects} from "./championships.js"
 
 document.addEventListener("keypress", handleStart,{once: true})
 const title= document.querySelector("[data-title]")
@@ -25,15 +25,26 @@ function updateLoop(time){
 
 function checkLose(){
     const lebronRect= getLebronRect()
+    const insideShip = getShipRects().some(rect => isCrash(lebronRect,rect))
 
     const outsideWorld= lebronRect.top < 0 || lebronRect.bottom > window.innerHeight
-    return outsideWorld
+    return outsideWorld || insideShip
+}
+
+function isCrash(rect1,rect2){
+    return (
+        rect1.left < rect2.right &&
+        rect1.top < rect2.bottom &&
+        rect1.right > rect2.left &&
+        rect1.bottom > rect2.top 
+    )
 }
 
 //Game start functioin
 function handleStart( ){
     title.classList.add("hide")
     setupLebron()
+    setupShips()
     lastTime=null
     window.requestAnimationFrame(updateLoop)
 }
@@ -43,7 +54,7 @@ function handleLose(){
     setTimeout(() =>{
     title.classList.remove("hide")
     subtitle.classList.remove("hide")
-    subtitle.textContent= "0 Pipes"
+    subtitle.textContent= `${getPassedShipsCount()} Championships Missed`
 //game restart
     document.addEventListener("keypress", handleStart,{once: true})
 },250)

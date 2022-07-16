@@ -1,9 +1,23 @@
-const HOLE_HEIGHT = 120
-const SHIP_INTERVAL = 1500
+const HOLE_HEIGHT = 250
+const SHIP_WIDTH= 120
+const SHIP_INTERVAL = 2500
 const SHIP_SPEED = .75
-const ships = []
-let timeSinceLastShip = 0
+let ships = []
+let timeSinceLastShip 
+let passedShipCount
 
+//setup tubes
+export function setupShips(){
+    document.documentElement.style.setProperty("--ship-width", SHIP_WIDTH)
+    document.documentElement.style.setProperty("--hole-height", HOLE_HEIGHT)
+//delete old pipe from screen on new start
+    ships.forEach(ship => ship.remove())
+    
+    timeSinceLastShip=SHIP_INTERVAL
+    passedShipCount=0
+}
+
+//update tubes
 export function updateShip(delta) {
     timeSinceLastShip += delta
 
@@ -12,9 +26,21 @@ export function updateShip(delta) {
         createShip()
     }
     ships.forEach(ship => {
+        if (ship.left + SHIP_WIDTH < 0){
+            passedShipCount++
+            return ship.remove()
+        }
         ship.left = ship.left - delta * SHIP_SPEED
     })
 
+}
+
+export function getPassedShipsCount(){
+    return passedShipCount
+}
+
+export function getShipRects(){
+    return ships.flatMap(ship => ship.rects())
 }
 
 //create tubes
@@ -32,6 +58,18 @@ function createShip() {
         },
         set left(value) {
             shipElem.style.setProperty("--ship-left", value)
+        },
+    
+    //remove pipes from screen once passed
+        remove(){
+            ships=ships.filter(s => s !== ship)
+            shipElem.remove()
+        }, 
+        rects(){
+            return[
+                topElem.getBoundingClientRect(),
+                bottomElem.getBoundingClientRect()
+            ]
         }
     }
     ship.left = window.innerWidth
