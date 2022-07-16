@@ -20,6 +20,9 @@ export function updateLebron(delta){
    timeSinceLastFloat+= delta
 }
 
+export function getLebronRect(){
+    return lebronChar.getBoundingClientRect()
+}
 
 
 function setTop(top){
