@@ -1,10 +1,11 @@
-//import lebron.js and championships.js
+//imports lebron.js and championships.js
 import {updateLebron, setupLebron,getLebronRect} from "./lebron.js"
 import {updateShip,setupShips,getPassedShipsCount, getShipRects} from "./championships.js"
 
 document.addEventListener("keypress", handleStart,{once: true})
 const title= document.querySelector("[data-title]")
 const subtitle= document.querySelector("[data-subtitle]")
+
 
 //loop function
 let lastTime
@@ -22,7 +23,7 @@ function updateLoop(time){
    lastTime=time
    window.requestAnimationFrame(updateLoop)
 }
-
+//lose function 
 function checkLose(){
     const lebronRect= getLebronRect()
     const insideShip = getShipRects().some(rect => isCrash(lebronRect,rect))
@@ -30,7 +31,7 @@ function checkLose(){
     const outsideWorld= lebronRect.top < 0 || lebronRect.bottom > window.innerHeight
     return outsideWorld || insideShip
 }
-
+//crash into ships for loss
 function isCrash(rect1,rect2){
     return (
         rect1.left < rect2.right &&
@@ -49,7 +50,7 @@ function handleStart( ){
     window.requestAnimationFrame(updateLoop)
 }
 
-//Game Lose function 
+//Game Lost start function 
 function handleLose(){
     setTimeout(() =>{
     title.classList.remove("hide")
@@ -57,5 +58,5 @@ function handleLose(){
     subtitle.textContent= `${getPassedShipsCount()} Championships Missed`
 //game restart
     document.addEventListener("keypress", handleStart,{once: true})
-},250)
+},350)
 }

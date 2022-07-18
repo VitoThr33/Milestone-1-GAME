@@ -1,7 +1,7 @@
 const HOLE_HEIGHT = 250
-const SHIP_WIDTH= 120
-const SHIP_INTERVAL = 2500
-const SHIP_SPEED = .75
+const SHIP_WIDTH= 75
+const SHIP_INTERVAL = 2000
+const SHIP_SPEED = .69
 let ships = []
 let timeSinceLastShip 
 let passedShipCount
@@ -60,7 +60,7 @@ function createShip() {
             shipElem.style.setProperty("--ship-left", value)
         },
     
-    //remove pipes from screen once passed
+//remove pipes from screen once passed
         remove(){
             ships=ships.filter(s => s !== ship)
             shipElem.remove()
@@ -84,6 +84,6 @@ function createShipSegment(position) {
     return segment
 }
 
-function randomNumberBetween(min, max) {
+function randomNumberBetween(min, max) { 
     return Math.floor(Math.random() * (max - min + 1) + min)
 }

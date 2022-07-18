@@ -6,11 +6,9 @@ body{
     margin: 0;
     overflow: hidden;
     background-image: url("resources/background1.jpg");
-    background-size: ;
+    background-blend-mode: 40%;
     
 }
-
-
 
 .title{
     z-index: 10;
@@ -22,7 +20,7 @@ body{
     margin: 0;
     flex-direction: column;
     top: 125px;
-    color: greenyellow;
+    color: red;
 }
 
 
@@ -63,6 +61,8 @@ body{
     width: 100%;
     background-image: url("resources/ship.jpg ");
     background-size: calc(var(--ship-width)*1px);
+    border-radius: % 
+    ;
 }
 
 .ship > .top{

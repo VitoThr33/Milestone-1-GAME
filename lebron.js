@@ -3,6 +3,7 @@ const lebron_speed=0.5
 const float_duration=150
 let timeSinceLastFloat= Number.POSITIVE_INFINITY
 
+
 export function setupLebron(){
     setTop(window.innerHeight/2)
     document.removeEventListener('keydown', handleFly)

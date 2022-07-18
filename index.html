@@ -5,8 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  
-  <title>Document</title>
+  <title>LebRun Run</title>
+ <audio loop autoplay>
+    <source src="resources/dgtl 221.wav" type="audio/wav">
+    
+  Your browser does not support the audio element.
+  </audio>
+
 </head>
 <body>
   <h1 class="title" data-title>
@@ -14,7 +19,14 @@
     <small data-subtitle class="subtitle hide"></small>
   </h1>
   <div data-lebron class="lebron"></div>
-  
+  <div class="hiscore">
+    <h2>Top 5 clickers</h2>
+    <h3>(on this device)</h3>
+    <button onClick="clearScores()">Clear</button>
+    <table class="scoretable">
+    </table>
+  </div>
+ 
 <script src="script.js" type="module"></script>
 </body>
 </html>
