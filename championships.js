@@ -1,19 +1,19 @@
-const HOLE_HEIGHT = 250
-const SHIP_WIDTH= 75
-const SHIP_INTERVAL = 2000
-const SHIP_SPEED = .69
+const holeHeight = 250
+const shipWidth= 75
+const shipInterval = 2000
+const shipSpeed = .69
 let ships = []
 let timeSinceLastShip 
 let passedShipCount
 
 //setup tubes
 export function setupShips(){
-    document.documentElement.style.setProperty("--ship-width", SHIP_WIDTH)
-    document.documentElement.style.setProperty("--hole-height", HOLE_HEIGHT)
+    document.documentElement.style.setProperty("--ship-width", shipWidth)
+    document.documentElement.style.setProperty("--hole-height", holeHeight)
 //delete old pipe from screen on new start
     ships.forEach(ship => ship.remove())
     
-    timeSinceLastShip=SHIP_INTERVAL
+    timeSinceLastShip=shipInterval
     passedShipCount=0
 }
 
@@ -21,16 +21,16 @@ export function setupShips(){
 export function updateShip(delta) {
     timeSinceLastShip += delta
 
-    if (timeSinceLastShip > SHIP_INTERVAL) {
-        timeSinceLastShip -= SHIP_INTERVAL
+    if (timeSinceLastShip > shipInterval) {
+        timeSinceLastShip -= shipInterval
         createShip()
     }
     ships.forEach(ship => {
-        if (ship.left + SHIP_WIDTH < 0){
+        if (ship.left + shipWidth < 0){
             passedShipCount++
             return ship.remove()
         }
-        ship.left = ship.left - delta * SHIP_SPEED
+        ship.left = ship.left - delta * shipSpeed
     })
 
 }
@@ -51,7 +51,8 @@ function createShip() {
     shipElem.append(topElem)  
     shipElem.append(bottomElem)
     shipElem.classList.add("ship")
-    shipElem.style.setProperty("--hole-top", randomNumberBetween(HOLE_HEIGHT * 1.5, window.innerHeight - HOLE_HEIGHT * .5))
+//set top 
+    shipElem.style.setProperty("--hole-top", randomNumberBetween(holeHeight * 1.5, window.innerHeight - holeHeight * .5))
     const ship= {
         get left() {
             return parseFloat(getComputedStyle(shipElem).getPropertyValue("--ship-left"))

@@ -56,7 +56,7 @@ function handleLose(){
     title.classList.remove("hide")
     subtitle.classList.remove("hide")
     subtitle.textContent= `${getPassedShipsCount()} Championships Missed`
-//game restart
+//game restart give time incase jamming space bar
     document.addEventListener("keypress", handleStart,{once: true})
 },350)
 }

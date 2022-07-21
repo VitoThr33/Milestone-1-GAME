@@ -1,4 +1,29 @@
-*, *::after, *::before{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* *, *::after, *::before{
     box-sizing: border-box;
 }
 
@@ -8,6 +33,12 @@ body{
     background-image: url("resources/background1.jpg");
     background-blend-mode: 40%;
     
+}
+
+audio{
+    height: 20px;
+    width:200px;
+     
 }
 
 .title{
@@ -74,3 +105,9 @@ body{
     bottom: 0;
     top:calc(100vh - (var(--hole-top)*1px) + calc(var(--hole-height)*1px)); 
 }
+
+.hiscore{
+    color: ;
+} 
+
+*/
