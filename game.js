@@ -1,85 +1,167 @@
-// CANVAS
-const cnvs = document.getElementById("lebron");
-const cntx = cnvs.getContext("2d");
+// SELECT CVS
+const cvs = document.getElementById("lebron");
+const ctx = cvs.getContext("2d");
 
 // GAME VARS AND CONSTS
 let frames = 0;
-const DEGREE = Math.PI/180;
 
-// LOAD IMAGES
-const layout = new Image();
-layout.src="resources/layout.png"
 
-//GAME STAGES
-const stage= {
-    present: 0,
-    readyUP: 0, 
-    game: 1,
-    die: 2, 
+// LOAD LAYOUT IMAGE
+const layout= new Image();
+layout.src = "resources/layout.png";
+
+
+// GAME STATE
+const state = {
+    current : 0,
+    getReady : 0,
+    game : 1,
+    over : 2
 }
 
-//CONTROLS
-cnvs.addEventListener("click", function(evt){
-    switch(stage.present){
-        case stage.readyUP:
-            stage.present= stage.game;
+// START BUTTON COORD
+const startBtn = {
+    sX : 120,
+    sY : 263,
+    w : 83,
+    h : 29,
+    dX:180,
+    dY:229,
+}
+
+// CONTROL THE GAME
+cvs.addEventListener("click", function(evt){
+    switch(state.current){
+        case state.getReady:
+            state.current = state.game;
+            
             break;
-            case stage.game:
-                leBall.spin();
-                break;
-                case stage.die:
-                    stage.present= stage.readyUP;
-                    break;
+        case state.game:
+            if(leBall.y - leBall.radius <= 0) return;
+            leBall.spin();
+            
+            break;
+        case state.over:
+            let rect = cvs.getBoundingClientRect();
+            let clickX = evt.clientX - rect.left;
+            let clickY = evt.clientY - rect.top;
+            
+            // CHECK IF WE CLICK ON THE START BUTTON
+            if(clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w && clickY >= startBtn.y && clickY <= startBtn.y + startBtn.h){
+                pipes.reset();
+                leBall.speedReset();
+                score.reset();
+                state.current = state.getReady;
+            }
+            break;
     }
-})
+});
 
 
-//BACKGROUND
-const backG= {
-        sX : 1,
-        sY : 0,
-        sW : 275,
-        sH : 226,
-        dX : 0,
-        dY : 0, 
-        dW : cnvs.width,
-        dH : cnvs.height-250,
+// BACKGROUND
+const bg = {
+    sX : 1,
+    sY : 0,
+    sW : 275,
+    sH : 226,
+    dX : 0,
+    dY : 0, 
+    dW : cvs.width,
+    dH : cvs.height-250,
 
-        dx: 2,
-        
+    dx: 2,
     
     draw : function(){
-        cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h);
-         }
+        ctx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h);
+    
+        
+        ctx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h);
+    
+    }
+    
 }
 
-//FLOOR
-const floor= {
+// FOREGROUND
+const fg = {
     sX : 276.5,
     sY : 0,
     sW : 224,
     sH : 112,
     dX : 0,
-    dY : cnvs.height-250, 
+    dY : cvs.height-250, 
     dW : 1500,
     dH : 250,
 
     dx: 2,
     
-
-draw : function(){
-    cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h, this.w);
-
-    cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h, this.w);
-},
-    //MOVE FLOOR  
+    draw : function(){
+        ctx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h, this.w);
+        
+        ctx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h, this.w);
+    },
+//MOVE FLOOR    
     update: function(){
-        if (stage.present == stage.game){
-            this.dX=(this.dX-this.dx) % (this.dW/2);
+        if(state.current == state.game){
+            this.x = (this.x - this.dx)%(this.w/2);
         }
-     }
+    }
 }
 
+// LEBRON
+const leBall = {
+    animation: [
+        {sX:277, sY: 112},
+        {sX:277, sY: 139},
+        {sX:277, sY: 164},
+        {sX:277, sY: 139},
+    ],
+    x:50,
+    y:150,
+    w:34,
+    h:26,
+
+    radius: 10,
+
+    frame:0,
+    gravity: 0.25,
+    jump: 4.6,
+    speed: 0,
+
+    draw: function(){
+        let leBall = this.animation[this.frame];
+
+        ctx.save();
+
+        ctx.drawImage(layout, leBall.sX, leBall.sY, this.w, this.h, this.x, this.y, this.w, this.h);
+    },
+    spin : function(){
+        this.speed =- this.jump;
+    },
+
+    update : function(){
+//READY UP SPIN SLOW
+        this.period= state.current== state.getReady ? 10:5;
+//INCREMENT BY 1 EACH PERIOD
+        this.frame +=  frames%this.period == 0 ? 1:0;
+//CHANGE FRAME 0-4 THEN TO 0
+        this.frame =this.frame%this.animation.length;
+            if (state.current == state.getReady){
+//RESET POS AFTER DIE  
+                this.y=400;
+
+            }else{
+                this.speed += this.gravity;
+                this.y += this.speed;
+                    if(this.y+this.h >= cvs.height - fg.dH){
+                        this.y=cvs.height - fg.dH - this.h;
+                        if (state.current == state.game){
+                            state.current = state.over;
+                
+                        }
+                    }
+            }
+    }
+}
 //GET READY
 const readyUP= {
     sX: 0,
@@ -92,15 +174,33 @@ const readyUP= {
     y:200,
 
     draw : function(){
-        if(stage.present==stage.readyUP){
-           cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.x, this.y, this.dW, this.dH);
+        if(state.current==state.getReady){
+           ctx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.x, this.y, this.dW, this.dH);
 } 
         }
         
 }
+// GET READY MESSAGE
+const getReady = {
+    sX: 0,
+    sY: 228,
+    sW: 173,
+    sH: 153,
+    dW: 250,
+    dH: 250,
+    x:195,
+    y:200,
+    
+    draw: function(){
+        if(state.current == state.getReady){
+            ctx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.x, this.y, this.dW, this.dH);
+        }
+    }
+    
+}
 
-//GAME OVER
-const gameOver= {
+// GAME OVER MESSAGE
+const gameOver = {
     sX: 175,
     sY: 228,
     sW: 225,
@@ -109,110 +209,55 @@ const gameOver= {
     dH: 300,
     x:180,
     y:220,
-
-    draw : function(){
-        if (stage.present==stage.die){
-           cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.x, this.y, this.dW, this.dH); 
-        }
-        
-}
-}
-//LEBRON
-
-//LeBALL ANIMATION FOR SPIN
-const leBall = {
-    Animation: [
-        {sX:277, sY: 112},
-        {sX:277, sY: 139},
-        {sX:277, sY: 164},
-        {sX:277, sY: 139},
-    ],
-    x:150,
-    y:400,
-    w:34,
-    h:26,
-
-    radius: 25,
-
-    frame:0,
-    gravity: 0.25,
-    jump: 4.6,
-    speed: 0,
-
-    draw: function(){
-        let leBall = this.Animation[this.frame];
-
-        cntx.drawImage(layout, leBall.sX, leBall.sY, this.w, this.h, this.x, this.y, this.w, this.h);
-    },
-    spin : function(){
-        this.speed =- this.jump;
-    },
-
-    update : function(){
-//READY UP SPIN SLOW
-        this.period= stage.present== stage.readyUP ? 10:5;
-//INCREMENT BY 1 EACH PERIOD
-        this.frame +=  frames%this.period == 0 ? 1:0;
-//CHANGE FRAME 0-4 THEN TO 0
-        this.frame =this.frame%this.Animation.length;
-            if (stage.present == stage.readyUP){
-//RESET POS AFTER DIE  
-                this.y=400;
-
-            }else{
-                this.speed += this.gravity;
-                this.y += this.speed;
-                    if(this.y+this.h >= cnvs.height - floor.dH){
-                        this.y=cnvs.height - floor.dH - this.h;
-                        if (stage.present == stage.game){
-                            stage.present = stage.die;
-                
-                        }
-                    }
-            }
-    }
-}
-
-//CHAMPIONSHIPS
-const ships= {
-    position: [],
     
-    top: {
-        sX:553,
-        sY:-100,
-        
+    draw: function(){
+        if(state.current == state.over){
+            ctx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.x, this.y, this.dW, this.dH);    
+        }
+    }
+    
+}
+
+// PIPES
+const pipes = {
+    position : [],
+    
+    top : {
+        sX : 553,
+        sY : 0
     },
     bottom:{
-        sX:502,
-        sY:-200,
-        
-        
-        
+        sX : 502,
+        sY : 0
     },
-    w: 53,
-    h:550,
-    gap:-65,
-    maxYPos:-150,
-    dx:2,
-
-    draw: function(){
-        for(let i = 0; i < this.position.length; i++){
-            let p= this.position[i];
-
-            let topYPos= p.y;
-            let bottomYPos= p.y + this.h + this.gap;
-//TOP CHAMPIONSHIP
-            cntx.drawImage(layout, this.top.sX, this.top.sY, this.w, this.h, p.x, topYPos, this.w, this.h); 
-//BOTTOM CHAMPIONSHIP
-            cntx.drawImage(layout, this.bottom.sX, this.bottom.sY, this.w, this.h, p.x, bottomYPos, this.w, this.h); 
+    
+    w : 53,
+    h : 400,
+    gap : 150,
+    maxYPos : -150,
+    dx : 2,
+    
+    draw : function(){
+        for(let i  = 0; i < this.position.length; i++){
+            let p = this.position[i];
+            
+            let topYPos = p.y;
+            let bottomYPos = p.y + this.h + this.gap;
+            
+            // top pipe
+            ctx.drawImage(layout, this.top.sX, this.top.sY, this.w, this.h, p.x, topYPos, this.w, this.h);  
+            
+            // bottom pipe
+            ctx.drawImage(layout, this.bottom.sX, this.bottom.sY, this.w, this.h, p.x, bottomYPos, this.w, this.h);  
         }
     },
+    
     update: function(){
-        if(stage.present !== stage.game) return;
+        if(state.current !== state.game) return;
         
         if(frames%100 == 0){
             this.position.push({
-                x : cnvs.width,
+                x : cvs.width,
                 y : this.maxYPos * ( Math.random() + 1)
             });
         }
@@ -221,51 +266,88 @@ const ships= {
             
             let bottomPipeYPos = p.y + this.h + this.gap;
             
-// HIT CHAMPIONSHIPS
-// TOP CHAMPIONSHIPS
+            // COLLISION DETECTION
+            // TOP PIPE
             if(leBall.x + leBall.radius > p.x && leBall.x - leBall.radius < p.x + this.w && leBall.y + leBall.radius > p.y && leBall.y - leBall.radius < p.y + this.h){
-                stage.present = stage.die;
+                state.current = state.over;
                 
             }
-//BOTTOM CHAMPIONSHIPS
+            // BOTTOM PIPE
             if(leBall.x + leBall.radius > p.x && leBall.x - leBall.radius < p.x + this.w && leBall.y + leBall.radius > bottomPipeYPos && leBall.y - leBall.radius < bottomPipeYPos + this.h){
-                stage.present = stage.die;
+                state.current = state.over;
                 
             }
             
-// MOVE CHAMPIONSHIPS LEFT
+            // MOVE THE PIPES TO THE LEFT
             p.x -= this.dx;
             
-// DELETE FROM ARRAY ONCE OFF CNVS
+            // if the pipes go beyond canvas, we delete them from the array
             if(p.x + this.w <= 0){
                 this.position.shift();
+                score.value += 1;
                 
+                score.best = Math.max(score.value, score.best);
+                localStorage.setItem("best", score.best);
             }
         }
+    },
+    
+    reset : function(){
+        this.position = [];
+    }
+    
+}
+
+// SCORE
+const score= {
+    best : parseInt(localStorage.getItem("best")) || 0,
+    value : 0,
+    
+    draw : function(){
+        ctx.fillStyle = "#FFF";
+        ctx.strokeStyle = "#000";
+        
+        if(state.current == state.game){
+            ctx.lineWidth = 2;
+            ctx.font = "35px Teko";
+            ctx.fillText(this.value, cvs.width/2, 50);
+            ctx.strokeText(this.value, cvs.width/2, 50);
+            
+        }else if(state.current == state.over){
+            // SCORE VALUE
+            ctx.font = "25px Teko";
+            ctx.fillText(this.value, 325, 186);
+            ctx.strokeText(this.value, 325, 186);
+            // BEST SCORE
+            ctx.fillText(this.best, 425, 425);
+            ctx.strokeText(this.best, 425,425);
+        }
+    },
+    
+    reset : function(){
+        this.value = 0;
     }
 }
 
-
 // DRAW
- function draw(){
-    cntx.fillStyle = "#70c5ce";
-    cntx.fillRect(0, 0, cnvs.width, cnvs.height);
+function draw(){
+    ctx.fillStyle = "#70c5ce";
+    ctx.fillRect(0, 0, cvs.width, cvs.height);
     
-    backG.draw();
-    ships.draw();
-    floor.draw();
+    bg.draw();
+    pipes.draw();
+    fg.draw();
     leBall.draw();
-    readyUP.draw();
+    getReady.draw();
     gameOver.draw();
-    
+    score.draw();
 }
 
 // UPDATE
 function update(){
-   leBall.update();
-   floor.update();
-   ships.update();
-    
+    leBall.update();
+    fg.update();
+    pipes.update();
 }
 
 // LOOP
@@ -277,4 +359,3 @@ function loop(){
     requestAnimationFrame(loop);
 }
 loop();
-
