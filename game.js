@@ -1,6 +1,5 @@
 // CANVAS
 const cnvs = document.getElementById("lebron");
-
 const cntx = cnvs.getContext("2d");
 
 // GAME VARS AND CONSTS
@@ -20,16 +19,16 @@ const stage= {
 }
 
 //CONTROLS
-document.addEventListener("click", function(evt){
-    switch(stage.current){
+cnvs.addEventListener("click", function(evt){
+    switch(stage.present){
         case stage.readyUP:
-            stage.current= stage.game;
+            stage.present= stage.game;
             break;
             case stage.game:
                 leBall.spin();
                 break;
                 case stage.die:
-                    stage.current= stage.readyUP;
+                    stage.present= stage.readyUP;
                     break;
     }
 })
@@ -45,11 +44,40 @@ const backG= {
         dY : 0, 
         dW : cnvs.width,
         dH : cnvs.height,
+
+        dx: 2,
         
     
     draw : function(){
         cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h);
          }
+}
+
+//FLOOR
+const floor= {
+    sX : 276.5,
+    sY : 0,
+    sW : 224,
+    sH : 112,
+    dX : 0,
+    dY : cnvs.height-112, 
+    dW : 1500,
+    dH : 112,
+
+    dx: 2,
+    
+
+draw : function(){
+    cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h, this.w);
+
+    cntx.drawImage(layout, this.sX, this.sY, this.sW, this.sH, this.dX, this.dY, this.dW, this.dH, this.h, this.w);
+},
+    //MOVE FLOOR  
+    update: function(){
+        if (stage.present == stage.game){
+            this.dX=(this.dX-this.dx) % (this.dW/2);
+        }
+     }
 }
 
 //GET READY
@@ -105,6 +133,9 @@ const leBall = {
     h:26,
 
     frame:0,
+    gravity: 0.25,
+    jump: 4.6,
+    speed: 0,
 
     draw: function(){
         let leBall = this.Animation[this.frame];
@@ -112,9 +143,35 @@ const leBall = {
         cntx.drawImage(layout, leBall.sX, leBall.sY, this.w, this.h, this.x, this.y, this.w, this.h);
     },
     spin : function(){
-
+        this.speed =- this.jump;
     },
+
+    update : function(){
+//READY UP SPIN SLOW
+        this.period= stage.present== stage.readyUP ? 10:5;
+//INCREMENT BY 1 EACH PERIOD
+        this.frame +=  frames%this.period == 0 ? 1:0;
+//CHANGE FRAME 0-4 THEN TO 0
+        this.frame =this.frame%this.Animation.length;
+            if (stage.present == stage.readyUP){
+//RESET POS AFTER DIE  
+                this.y=400;
+
+            }else{
+                this.speed += this.gravity;
+                this.y += this.speed;
+                    if(this.y+this.h >= cnvs.height - floor.dH){
+                        this.y=cnvs.height - floor.dH - this.h;
+                        if (stage.present == stage.game){
+                            stage.present = stage.die;
+                
+                        }
+                    }
+            }
+    }
 }
+
+//CHAMPIONSHIPS
 
 // DRAW
 function draw(){
@@ -125,10 +182,13 @@ function draw(){
     leBall.draw();
     readyUP.draw();
     gameOver.draw();
+    floor.draw();
 }
 
 // UPDATE
 function update(){
+   leBall.update();
+   floor.update();
     
 }
 
