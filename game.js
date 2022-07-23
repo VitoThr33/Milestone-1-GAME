@@ -43,7 +43,7 @@ const backG= {
         dX : 0,
         dY : 0, 
         dW : cnvs.width,
-        dH : cnvs.height,
+        dH : cnvs.height-250,
 
         dx: 2,
         
@@ -60,9 +60,9 @@ const floor= {
     sW : 224,
     sH : 112,
     dX : 0,
-    dY : cnvs.height-112, 
+    dY : cnvs.height-250, 
     dW : 1500,
-    dH : 112,
+    dH : 250,
 
     dx: 2,
     
@@ -89,7 +89,7 @@ const readyUP= {
     dW: 250,
     dH: 250,
     x:195,
-    y:460,
+    y:200,
 
     draw : function(){
         if(stage.present==stage.readyUP){
@@ -108,7 +108,7 @@ const gameOver= {
     dW: 300,
     dH: 300,
     x:180,
-    y:460,
+    y:220,
 
     draw : function(){
         if (stage.present==stage.die){
@@ -131,6 +131,8 @@ const leBall = {
     y:400,
     w:34,
     h:26,
+
+    radius: 25,
 
     frame:0,
     gravity: 0.25,
@@ -172,23 +174,97 @@ const leBall = {
 }
 
 //CHAMPIONSHIPS
+const ships= {
+    position: [],
+    
+    top: {
+        sX:553,
+        sY:-100,
+        
+    },
+    bottom:{
+        sX:502,
+        sY:-200,
+        
+        
+        
+    },
+    w: 53,
+    h:550,
+    gap:-65,
+    maxYPos:-150,
+    dx:2,
+
+    draw: function(){
+        for(let i = 0; i < this.position.length; i++){
+            let p= this.position[i];
+
+            let topYPos= p.y;
+            let bottomYPos= p.y + this.h + this.gap;
+//TOP CHAMPIONSHIP
+            cntx.drawImage(layout, this.top.sX, this.top.sY, this.w, this.h, p.x, topYPos, this.w, this.h); 
+//BOTTOM CHAMPIONSHIP
+            cntx.drawImage(layout, this.bottom.sX, this.bottom.sY, this.w, this.h, p.x, bottomYPos, this.w, this.h); 
+        }
+    },
+    update: function(){
+        if(stage.present !== stage.game) return;
+        
+        if(frames%100 == 0){
+            this.position.push({
+                x : cnvs.width,
+                y : this.maxYPos * ( Math.random() + 1)
+            });
+        }
+        for(let i = 0; i < this.position.length; i++){
+            let p = this.position[i];
+            
+            let bottomPipeYPos = p.y + this.h + this.gap;
+            
+// HIT CHAMPIONSHIPS
+// TOP CHAMPIONSHIPS
+            if(leBall.x + leBall.radius > p.x && leBall.x - leBall.radius < p.x + this.w && leBall.y + leBall.radius > p.y && leBall.y - leBall.radius < p.y + this.h){
+                stage.present = stage.die;
+                
+            }
+//BOTTOM CHAMPIONSHIPS
+            if(leBall.x + leBall.radius > p.x && leBall.x - leBall.radius < p.x + this.w && leBall.y + leBall.radius > bottomPipeYPos && leBall.y - leBall.radius < bottomPipeYPos + this.h){
+                stage.present = stage.die;
+                
+            }
+            
+// MOVE CHAMPIONSHIPS LEFT
+            p.x -= this.dx;
+            
+// DELETE FROM ARRAY ONCE OFF CNVS
+            if(p.x + this.w <= 0){
+                this.position.shift();
+                
+            }
+        }
+    }
+}
+
 
 // DRAW
-function draw(){
+ function draw(){
     cntx.fillStyle = "#70c5ce";
     cntx.fillRect(0, 0, cnvs.width, cnvs.height);
     
     backG.draw();
+    ships.draw();
+    floor.draw();
     leBall.draw();
     readyUP.draw();
     gameOver.draw();
-    floor.draw();
+    
 }
 
 // UPDATE
 function update(){
    leBall.update();
    floor.update();
+   ships.update();
     
 }
 
