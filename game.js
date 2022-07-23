@@ -316,8 +316,8 @@ const score= {
         }else if(state.current == state.over){
             // SCORE VALUE
             ctx.font = "25px Teko";
-            ctx.fillText(this.value, 325, 186);
-            ctx.strokeText(this.value, 325, 186);
+            ctx.fillText(this.value, 425, 350);
+            ctx.strokeText(this.value, 425, 350);
             // BEST SCORE
             ctx.fillText(this.best, 425, 425);
             ctx.strokeText(this.best, 425,425);
