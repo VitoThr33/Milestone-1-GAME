@@ -25,8 +25,8 @@ const startBtn = {
     sY: 263,
     w: 83,
     h: 29,
-    dX: 180,
-    dY: 229,
+    dX: 150,
+    dY: 260,
 }
 
 // CONTROL THE GAME
@@ -89,7 +89,7 @@ const fg = {
     sH: 112,
     dX: 0,
     dY: cvs.height - 250,
-    dW: 1500,
+    dW: 2000,
     dH: 250,
 
     dx: 2,
@@ -102,7 +102,7 @@ const fg = {
     //MOVE FLOOR    
     update: function () {
         if (stage.current == stage.game) {
-            this.x = (this.x - this.dx) % (this.w / 2);
+            this.dX = (this.dX - this.dx) % (this.dW/2 );
         }
     }
 }
