@@ -1,9 +1,9 @@
 # Milestone-1-GAME
 Welcome to LebRUN Championship Run!  
 
-Game Controls: PRESS ANY KEY TO START GAME
-                DODGE CHAMPIONSHIPS: PRESS SPACE BAR
-                NEW GAME: PRESS ANY KEY TO START NEW GAME ONCE DEAD
+Game Controls: CLICK SCREEN TO START GAME
+                DODGE CHAMPIONSHIPS: CLICK SCREEN TO JUMP
+                NEW GAME: CLICK SCREEN TO RESTART GAME
 
 I created this game because flappy bird was pretty addicting and fun. 
 I wanted to throw my spin on things as i would ultimately like a job somewhere in the sports world.
