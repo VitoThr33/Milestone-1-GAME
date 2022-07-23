@@ -219,7 +219,7 @@ const pipes = {
     gap: 150,
     maxYPos: -150,
     dx: 2,
-
+//BORROWED PIPE AND CRASH PIPE FROM https://www.youtube.com/watch?v=L07i4g-zhDA&ab_channel=CodeExplained
     draw: function () {
         for (let i = 0; i < this.position.length; i++) {
             let p = this.position[i];

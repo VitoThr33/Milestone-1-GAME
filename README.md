@@ -12,3 +12,11 @@ because lets admit it we all know Jordan is the GOAT!
 
 
 BUGS I COULDNT FIX: GETTING THE GAME TO RESTART ONCE FINISHED MEDAL COUNT. 
+
+
+USED AN ARRAY OF TUTORIALS TO GET TO THIS POINT SEE BELOW
+https://www.youtube.com/watch?v=3SsYZDJdeXk&ab_channel=KnifeCircus
+
+https://www.youtube.com/watch?v=8xPsg6yv7TU&ab_channel=freeCodeCamp.org
+
+https://www.youtube.com/watch?v=L07i4g-zhDA&ab_channel=CodeExplained
