@@ -11,4 +11,4 @@ Therefore I created a meme-verseion of flappy where you are Lebron dodging as ma
 because lets admit it we all know Jordan is the GOAT!
 
 
-BUGS I COULDNT FIX: GETTING THE GAME TO RESTART ONCE FINISHED.
+BUGS I COULDNT FIX: GETTING THE GAME TO RESTART ONCE FINISHED MEDAL COUNT. 
